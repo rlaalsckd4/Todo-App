@@ -17,6 +17,10 @@ function App() {
   );
 }
 
+function Header() {
+  return <h1 className="header"> My Todo App</h1>;
+}
+
 function TodoInput({ todoList, setTodoList }) {
   const [inputValue, setInputValue] = useState("");
 
