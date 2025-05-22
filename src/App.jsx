@@ -24,7 +24,7 @@ function Header() {
 function TodoInput({ todoList, setTodoList }) {
   const [inputValue, setInputValue] = useState("");
 
-    const handleAdd = () => {
+  const handleAdd = () => {
     if (inputValue.trim() === "") return;
     const newTodo = { id: Number(new Date()), content: inputValue, done: false };
     setTodoList([...todoList, newTodo]);
@@ -36,13 +36,10 @@ function TodoInput({ todoList, setTodoList }) {
       <input
         value={inputValue}
         onChange={(event) => setInputValue(event.target.value)}
-      />
-      <button
+        placeholder="할 일을 입력하세요" />
+      <button className="add=btn"
         onClick={() => {
-          const newTodo = { id: Number(new Date()), content: inputValue };
-          const newTodoList = [...todoList, newTodo];
-          setTodoList(newTodoList);
-          setInputValue("");
+          handleAdd
         }}
       >
         추가하기
