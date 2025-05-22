@@ -9,11 +9,11 @@ function App() {
   ]);
 
   return (
-    <>
+    <div className="container">
       <TodoList todoList={todoList} setTodoList={setTodoList} />
       <hr />
       <TodoInput todoList={todoList} setTodoList={setTodoList} />
-    </>
+    </div>
   );
 }
 
