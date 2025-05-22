@@ -24,6 +24,13 @@ function Header() {
 function TodoInput({ todoList, setTodoList }) {
   const [inputValue, setInputValue] = useState("");
 
+    const handleAdd = () => {
+    if (inputValue.trim() === "") return;
+    const newTodo = { id: Number(new Date()), content: inputValue, done: false };
+    setTodoList([...todoList, newTodo]);
+    setInputValue("");
+  };
+
   return (
     <>
       <input
