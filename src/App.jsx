@@ -10,8 +10,9 @@ function App() {
 
   return (
     <div className="container">
-      <TodoList todoList={todoList} setTodoList={setTodoList} />
+      <Header />
       <hr />
+      <TodoList todoList={todoList} setTodoList={setTodoList} />
       <TodoInput todoList={todoList} setTodoList={setTodoList} />
     </div>
   );
@@ -32,25 +33,25 @@ function TodoInput({ todoList, setTodoList }) {
   };
 
   return (
-    <>
+    <div className="input-wrapper">
       <input
         value={inputValue}
         onChange={(event) => setInputValue(event.target.value)}
         placeholder="할 일을 입력하세요" />
-      <button className="add=btn"
-        onClick={() => {
+      <button className="add-btn"
+        onClick={
           handleAdd
-        }}
+        }
       >
         추가하기
       </button>
-    </>
+    </div>
   );
 }
 
 function TodoList({ todoList, setTodoList }) {
   return (
-    <ul>
+    <ul className="todo-list">
       {todoList.map((todo) => (
         <Todo key={todo.id} todo={todo} setTodoList={setTodoList} />
       ))}
@@ -59,33 +60,53 @@ function TodoList({ todoList, setTodoList }) {
 }
 
 function Todo({ todo, setTodoList }) {
-  const [inputValue, setInputValue] = useState("");
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editValue, setEditValue] = useState(todo.content);
+
+  const handleDelete = () => {
+    setTodoList((prev) => prev.filter((el) => el.id !== todo.id));
+  };
+
+  const handleUpdate = () => {
+    if (editValue.trim() === "") return;
+    setTodoList((prev) =>
+      prev.map((el) =>
+        el.id === todo.id ? { ...el, content: editValue } : el
+      )
+    );
+    setIsEditMode(false);
+  };
+
+  const handleToggleDone = () => {
+    setTodoList((prev) =>
+      prev.map((el) =>
+        el.id === todo.id ? { ...el, done: !el.done } : el
+      )
+    );
+  };
+
+
   return (
-    <li>
-      {todo.content}
-      <input
-        value={inputValue}
-        onChange={(event) => setInputValue(event.target.value)}
-      />
-      <button
-        onClick={() => {
-          setTodoList((prev) =>
-            prev.map((el) =>
-              el.id === todo.id ? { ...el, content: inputValue } : el
-            )
-          );
-        }}
-      >
-        수정
-      </button>
-      <button
-        onClick={() => {
-          setTodoList((prev) => {
-            return prev.filter((el) => el.id !== todo.id);
-          });
-        }}
-      >
-        삭제
+    <li className={`todo-item ${todo.done ? "done" : ""}`}>
+      
+      {isEditMode ? (
+        <>
+          <input
+            className="edit-input"
+            value={editValue}
+            onChange={(e) => setEditValue(e.target.value)}
+          />
+          <button className="update-btn" onClick={handleUpdate}>확인</button>
+        </>
+      ) : (
+        <>
+          <span>{todo.content}</span>
+          <button className="edit-btn" onClick={() => {setEditValue(todo.content);setIsEditMode(true)}}>수정</button>
+        </>
+      )}
+      <button className="delete-btn" onClick={handleDelete}>삭제</button>
+      <button className="done-btn" onClick={handleToggleDone}>
+        {todo.done ? "완료됨" : "완료"}
       </button>
     </li>
   );
